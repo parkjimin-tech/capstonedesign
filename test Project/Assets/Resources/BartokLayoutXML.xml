@@ -1,0 +1,16 @@
+<xml>
+	<multiplier x="1" y="1"/>
+
+  <slot type="drawpile" x="1.5" y="0" xstagger="0.05" layer="1"/>
+  
+  <slot type="discardpile" x="-1.5" y="0" layer="2"/>
+  
+  <slot type="target" x="-1.5" y="0" layer="4"/>
+  
+  <slot type="hand" x="0" y="-8" rot="0" player="1" layer="3"/>
+  <slot type="hand" x="-10" y="0" rot="270" player="2" layer="3"/>
+  <slot type="hand" x="0" y="8" rot="180" player="3" layer="3"/>
+  <slot type="hand" x="10" y="0" rot="90" player="4" layer="3"/>
+	
+</xml>
+	
