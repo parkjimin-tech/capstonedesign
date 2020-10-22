@@ -40,6 +40,7 @@ public class Player
 
     public CardBartok RemoveCard(CardBartok cb)
     {
+        if (hand == null || !hand.Contains(cb)) return null;
         hand.Remove(cb);
         FanHand();
         return cb;
@@ -47,8 +48,7 @@ public class Player
 
     public void FanHand()
     {
-        float startRot = 0;
-        startRot = handSlotdef.rot;
+        float startRot = handSlotdef.rot;
         if(hand.Count > 1)
         {
             startRot += Bartok.S.handFanDegrees * (hand.Count - 1) / 2;
@@ -103,6 +103,7 @@ public class Player
 
         List<CardBartok> validCards = new List<CardBartok>();
         List<CardBartok> attackvalidCards = new List<CardBartok>();
+
         foreach (CardBartok tCB in hand)
         {
             if(Bartok.S.ValidPlay(tCB))
@@ -110,6 +111,7 @@ public class Player
                 validCards.Add(tCB);
             }
         }
+
         foreach (CardBartok tCB in hand)
         {
             if (Bartok.S.AttackValidPlay(tCB))
@@ -118,16 +120,16 @@ public class Player
             }
         }
 
-        if (attackvalidCards.Count == 0 && Bartok.S.attack_stack > 0)
-        {
-            for (int i = 0; i < Bartok.S.attack_stack; i++)
-            {
-                cb = AddCard(Bartok.S.Draw());
-                cb.callbackPlayer = this;
-            }
-            Bartok.S.attack_stack = 0;
-            return;
-        }
+        //if (attackvalidCards.Count == 0 && Bartok.attack_stack > 0)
+        //{
+        //    for (int i = 0; i < Bartok.attack_stack; i++)
+        //    {
+        //        cb = AddCard(Bartok.S.Draw());
+        //        cb.callbackPlayer = this;
+        //    }
+        //    Bartok.attack_stack = 0;
+        //    return;
+        //}
 
         if (validCards.Count == 0)
         {
@@ -145,15 +147,15 @@ public class Player
             case 1:
                 if (cb.suit == "S")
                 {
-                    Bartok.S.attack_stack += 5;
+                    Bartok.attack_stack += 5;
                 }
-                else Bartok.S.attack_stack += 3;
+                else Bartok.attack_stack += 3;
                 break;
             case 2:
-                Bartok.S.attack_stack += 2;
+                Bartok.attack_stack += 2;
                 break;
             case 3:
-                Bartok.S.attack_stack = 0;
+                Bartok.attack_stack = 0;
                 break;
             case 11:
                 Bartok.S.jack = 1;
