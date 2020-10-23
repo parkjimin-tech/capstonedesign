@@ -31,7 +31,7 @@ public class Player
             hand = new List<CardBartok>(cards);
         }
 
-        eCB.SetSortingLayerName("10");
+        eCB.SetSortingLayerName("20");
         eCB.eventualSortLayer = handSlotdef.layerName;
 
         FanHand();
@@ -94,7 +94,7 @@ public class Player
         if (Bartok.S.jack != 0) Bartok.S.jack = 0;
         if (Bartok.S.king != 0) Bartok.S.king = 0;
 
-        Utils.tr(Utils.RoundToPlaces(Time.time), "Player.TakeTurn");
+        //Utils.tr(Utils.RoundToPlaces(Time.time), "Player.TakeTurn");
 
         if (type == PlayerType.human) return;
 
@@ -112,7 +112,7 @@ public class Player
             }
         }
 
-        foreach (CardBartok tCB in hand)
+        foreach (CardBartok tCB in validCards)
         {
             if (Bartok.S.AttackValidPlay(tCB))
             {
@@ -120,18 +120,18 @@ public class Player
             }
         }
 
-        //if (attackvalidCards.Count == 0 && Bartok.attack_stack > 0)
-        //{
-        //    for (int i = 0; i < Bartok.attack_stack; i++)
-        //    {
-        //        cb = AddCard(Bartok.S.Draw());
-        //        cb.callbackPlayer = this;
-        //    }
-        //    Bartok.attack_stack = 0;
-        //    return;
-        //}
+		if (attackvalidCards.Count == 0 && Bartok.attack_stack > 0)
+		{
+			for (int i = 0; i < Bartok.attack_stack; i++)
+			{
+				cb = AddCard(Bartok.S.Draw());
+				cb.callbackPlayer = this;
+			}
+			Bartok.attack_stack = 0;
+			return;
+		}
 
-        if (validCards.Count == 0)
+		if (validCards.Count == 0)
         {
             cb = AddCard(Bartok.S.Draw());
             cb.callbackPlayer = this;
@@ -158,7 +158,7 @@ public class Player
                 Bartok.attack_stack = 0;
                 break;
             case 11:
-                Bartok.S.jack = 1;
+                Bartok.S.jack = 1 * Bartok.S.queen;
                 break;
             case 12:
                 Bartok.S.queen *= -1;
@@ -171,7 +171,7 @@ public class Player
 
     public void CBCallback(CardBartok tCB)
     {
-        Utils.tr(Utils.RoundToPlaces(Time.time), "Player.CBCallback()", tCB.name, "Player " + playerNum);
+        //Utils.tr(Utils.RoundToPlaces(Time.time), "Player.CBCallback()", tCB.name, "Player " + playerNum);
         Bartok.S.PassTurn();
     }
 }

@@ -60,7 +60,7 @@ public class Bartok : MonoBehaviour
     {
         deck = GetComponent<Deck>();
         deck.InitDeck(deckXML.text);
-        Deck.Shuffle(ref deck.cards);
+        //Deck.Shuffle(ref deck.cards);
 
         layout = GetComponent<LayoutBartok>();
         layout.ReadLayout(layoutXML.text);
@@ -120,44 +120,44 @@ public class Bartok : MonoBehaviour
         players[0].type = PlayerType.human;
 
         CardBartok tCB;
-        //int num = 0;
-        //for(int i = 0; i < 7; i++)
-        //{
-        //    switch (i)
-        //    {
-        //        case 0:
-        //            num = 0;
-        //            break;
-        //        case 1:
-        //            num = 11;
-        //            break;
-        //        case 2:
-        //            num = 12;
-        //            break;
-        //        case 3:
-        //            num = 24;
-        //            break;
-        //        case 4:
-        //            num = 25;
-        //            break;
-        //        case 5:
-        //            num = 50;
-        //            break;
-        //        case 6:
-        //            num = 51;
-        //            break;
-        //        default:
-        //            break;
-        //    }
-        //    num -= i;
-        //    tCB = Draw(num);
-        //    tCB.timeStart = Time.time + drawTimeStagger * (i * 4 + 3);
-        //    players[0].AddCard(tCB);
-        //}
-        
-        for (int i = 0; i < numStartingCards; i++)
+		int num = 0;
+		for (int i = 0; i < 7; i++)
+		{
+			switch (i)
+			{
+				case 0:
+					num = 0;
+					break;
+				case 1:
+					num = 1;
+					break;
+				case 2:
+					num = 13;
+					break;
+				case 3:
+					num = 14;
+					break;
+				case 4:
+					num = 26;
+					break;
+				case 5:
+					num = 27;
+					break;
+				case 6:
+					num = 40;
+					break;
+				default:
+					break;
+			}
+			num -= i;
+			tCB = Draw(num);
+			tCB.timeStart = Time.time + drawTimeStagger * (i * 4 + 3);
+			players[0].AddCard(tCB);
+		}
+
+		for (int i = 0; i < numStartingCards; i++)
         {
-            for (int j = 0; j < 4; j++)
+            for (int j = 0; j < 3; j++)
             {
                 tCB = Draw();
 
@@ -175,7 +175,7 @@ public class Bartok : MonoBehaviour
         tCB.MoveTo(layout.discardpile.pos + Vector3.back);
         tCB.state = CBState.toTarget;
         tCB.faceUP = true;
-        tCB.SetSortingLayerName("10");
+        tCB.SetSortingLayerName("20");
         tCB.eventualSortLayer = layout.target.layerName;
         if (targetCard != null)
         {
@@ -211,7 +211,7 @@ public class Bartok : MonoBehaviour
 
     public void CBCallback(CardBartok cb)
     {
-        Utils.tr(Utils.RoundToPlaces(Time.time), "Bartok.CBCallback()", cb.name);
+        //Utils.tr(Utils.RoundToPlaces(Time.time), "Bartok.CBCallback()", cb.name);
         StartGame();
     }
 
@@ -240,9 +240,13 @@ public class Bartok : MonoBehaviour
         if (idx >= players.Count || idx < 0)
         {
             idx %= players.Count;
-            if (idx < 0) idx = Mathf.Abs(idx) + 2;
-        }
-
+			if (idx < 0)
+			{
+				idx += 4;
+				idx %= players.Count;
+			}
+		}
+        print("attack_stack : " + attack_stack);
         CURRENT_PLAYER = players[idx];
         phase = TurnPhase.pre;
         CURRENT_PLAYER.TakeTurn();
@@ -250,7 +254,7 @@ public class Bartok : MonoBehaviour
         Vector3 lPos = CURRENT_PLAYER.handSlotdef.pos + Vector3.back * 5;
         turnLight.transform.position = lPos;
 
-        Utils.tr(Utils.RoundToPlaces(Time.time), "Bartok.PassTurn()", "Old: " + lastPlayerNum, " New: " + CURRENT_PLAYER.playerNum);
+        //Utils.tr(Utils.RoundToPlaces(Time.time), "Bartok.PassTurn()", "Old: " + lastPlayerNum, " New: " + CURRENT_PLAYER.playerNum);
     }
 
     public bool ValidPlay(CardBartok cb)
@@ -287,30 +291,31 @@ public class Bartok : MonoBehaviour
 
         if (phase == TurnPhase.waiting) return;
 
+        List<CardBartok> attackvalidCards = new List<CardBartok>();
+
+        foreach (CardBartok tmpCB in CURRENT_PLAYER.hand)
+        {
+            if (AttackValidPlay(tmpCB))
+            {
+                attackvalidCards.Add(tmpCB);
+            }
+        }
+
         switch (tCB.state)
         {
             case CBState.drawpile:
                 CardBartok cb;
-                //List<CardBartok> attackvalidCards = new List<CardBartok>();
-                
-                //foreach (CardBartok tmpCB in CURRENT_PLAYER.hand)
-                //{
-                //    if (AttackValidPlay(tmpCB))
-                //    {
-                //        attackvalidCards.Add(tmpCB);
-                //    }
-                //}
-                //if (attackvalidCards.Count == 0 && attack_stack > 0)
-                //{
-                //    for (int i = 0; i < attack_stack; i++)
-                //    {
-                //        cb = CURRENT_PLAYER.AddCard(Bartok.S.Draw());
-                //        cb.callbackPlayer = CURRENT_PLAYER;
-                //    }
-                //    attack_stack = 0;
-                //}
-                //else
-                {
+				if (attackvalidCards.Count == 0 && attack_stack > 0)
+				{
+					for (int i = 0; i < attack_stack; i++)
+					{
+						cb = CURRENT_PLAYER.AddCard(Bartok.S.Draw());
+						cb.callbackPlayer = CURRENT_PLAYER;
+					}
+					attack_stack = 0;
+				}
+				else
+				{
                     cb = CURRENT_PLAYER.AddCard(Draw());
                     cb.callbackPlayer = CURRENT_PLAYER;
                     Utils.tr(Utils.RoundToPlaces(Time.time), "Bartok.CardClicked()", "Draw", cb.name);
@@ -319,24 +324,16 @@ public class Bartok : MonoBehaviour
                 phase = TurnPhase.waiting;
                 break;
             case CBState.hand:
-                //attackvalidCards = new List<CardBartok>();
-                //foreach (CardBartok tmpCB in CURRENT_PLAYER.hand)
-                //{
-                //    if (AttackValidPlay(tmpCB))
-                //    {
-                //        attackvalidCards.Add(tmpCB);
-                //    }
-                //}
-                //if (attackvalidCards.Count == 0 && attack_stack > 0)
-                //{
-                //    for (int i = 0; i < attack_stack; i++)
-                //    {
-                //        cb = CURRENT_PLAYER.AddCard(Draw());
-                //        cb.callbackPlayer = CURRENT_PLAYER;
-                //    }
-                //    attack_stack = 0;
-                //}
-                if (ValidPlay(tCB) && tCB.faceUP)
+				if (attackvalidCards.Count == 0 && attack_stack > 0)
+				{
+					for (int i = 0; i < attack_stack; i++)
+					{
+						cb = CURRENT_PLAYER.AddCard(Draw());
+						cb.callbackPlayer = CURRENT_PLAYER;
+					}
+					attack_stack = 0;
+				}
+				if (ValidPlay(tCB) && tCB.faceUP)
                 {
                     CURRENT_PLAYER.RemoveCard(tCB);
                     MoveToTarget(tCB);
@@ -356,7 +353,7 @@ public class Bartok : MonoBehaviour
                             attack_stack = 0;
                             break;
                         case 11:
-                            jack = 1;
+                            jack = 1 * queen;
                             break;
                         case 12:
                             queen *= -1;
@@ -371,8 +368,7 @@ public class Bartok : MonoBehaviour
                 }
                 else
                 {
-                    Utils.tr(Utils.RoundToPlaces(Time.time),
-                    "Bartok.CardClicked()", "Attempted to Play", tCB.name, targetCard.name + " is target");
+                    Utils.tr(Utils.RoundToPlaces(Time.time),"Bartok.CardClicked()", "Attempted to Play", tCB.name, targetCard.name + " is target");
                 }
                 break;
         }
