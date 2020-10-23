@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 3831190208116344016}
   - component: {fileID: 3001114890379095326}
-  - component: {fileID: 8543649302445483392}
   - component: {fileID: 2605673839912810891}
+  - component: {fileID: 8000139776192739911}
   m_Layer: 0
   m_Name: PrefabCard
   m_TagString: Untagged
@@ -83,30 +83,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &8543649302445483392
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3909226756325634277}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6f0b45eae0ef61149b31ecf695a33d7f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  suit: 
-  rank: 0
-  color: {r: 0, g: 0, b: 0, a: 1}
-  colS: Black
-  decoGOs: []
-  pipGOs: []
-  back: {fileID: 1000014090761352, guid: 30a6ba41f0d264815a76b64a60ee0b62, type: 3}
-  def:
-    face: 
-    rank: 0
-    pips: []
-  spriteRenderers: []
 --- !u!65 &2605673839912810891
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -120,3 +96,27 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 2.56, y: 3.56, z: 0.2}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &8000139776192739911
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3909226756325634277}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0101a2b8b45f924195a12681ecdc704, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  suit: 
+  rank: 0
+  color: {r: 0, g: 0, b: 0, a: 1}
+  colS: Black
+  decoGOs: []
+  pipGOs: []
+  back: {fileID: 0}
+  def:
+    face: 
+    rank: 0
+    pips: []
+  spriteRenderers: []

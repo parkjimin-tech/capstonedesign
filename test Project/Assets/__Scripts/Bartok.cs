@@ -44,7 +44,7 @@ public class Bartok : MonoBehaviour
     public int jack = 0;
     public int queen = 1;
     public int king = 0;
-    public int attack_stack = 0;
+    public static int attack_stack = 0;
 
     private void Awake()
     {
@@ -239,10 +239,10 @@ public class Bartok : MonoBehaviour
         int idx = ((num + jack + king));
         if (idx >= players.Count || idx < 0)
         {
-            idx %= players.Count ;
+            idx %= players.Count;
             if (idx < 0) idx = Mathf.Abs(idx) + 2;
         }
-        
+
         CURRENT_PLAYER = players[idx];
         phase = TurnPhase.pre;
         CURRENT_PLAYER.TakeTurn();
@@ -291,26 +291,52 @@ public class Bartok : MonoBehaviour
         {
             case CBState.drawpile:
                 CardBartok cb;
-                if (!AttackValidPlay(tCB) && attack_stack > 0)
+                //List<CardBartok> attackvalidCards = new List<CardBartok>();
+                
+                //foreach (CardBartok tmpCB in CURRENT_PLAYER.hand)
+                //{
+                //    if (AttackValidPlay(tmpCB))
+                //    {
+                //        attackvalidCards.Add(tmpCB);
+                //    }
+                //}
+                //if (attackvalidCards.Count == 0 && attack_stack > 0)
+                //{
+                //    for (int i = 0; i < attack_stack; i++)
+                //    {
+                //        cb = CURRENT_PLAYER.AddCard(Bartok.S.Draw());
+                //        cb.callbackPlayer = CURRENT_PLAYER;
+                //    }
+                //    attack_stack = 0;
+                //}
+                //else
                 {
-                    for (int i = 0; i < Bartok.S.attack_stack; i++)
-                    {
-                        cb = CURRENT_PLAYER.AddCard(Draw());
-                        cb.callbackPlayer = CURRENT_PLAYER;
-                        Utils.tr(Utils.RoundToPlaces(Time.time), "Bartok.CardClicked()", "Draw", cb.name);
-                    }
-                    Bartok.S.attack_stack = 0;
-                }
-				else
-				{
                     cb = CURRENT_PLAYER.AddCard(Draw());
                     cb.callbackPlayer = CURRENT_PLAYER;
                     Utils.tr(Utils.RoundToPlaces(Time.time), "Bartok.CardClicked()", "Draw", cb.name);
                 }
+
                 phase = TurnPhase.waiting;
                 break;
             case CBState.hand:
-                if (ValidPlay(tCB))
+                //attackvalidCards = new List<CardBartok>();
+                //foreach (CardBartok tmpCB in CURRENT_PLAYER.hand)
+                //{
+                //    if (AttackValidPlay(tmpCB))
+                //    {
+                //        attackvalidCards.Add(tmpCB);
+                //    }
+                //}
+                //if (attackvalidCards.Count == 0 && attack_stack > 0)
+                //{
+                //    for (int i = 0; i < attack_stack; i++)
+                //    {
+                //        cb = CURRENT_PLAYER.AddCard(Draw());
+                //        cb.callbackPlayer = CURRENT_PLAYER;
+                //    }
+                //    attack_stack = 0;
+                //}
+                if (ValidPlay(tCB) && tCB.faceUP)
                 {
                     CURRENT_PLAYER.RemoveCard(tCB);
                     MoveToTarget(tCB);

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3831190208116344016}
   - component: {fileID: 3001114890379095326}
   - component: {fileID: 2605673839912810891}
-  - component: {fileID: 8542789133380476353}
+  - component: {fileID: 3877264284375477139}
   m_Layer: 0
   m_Name: PrefabCardBartok
   m_TagString: Untagged
@@ -96,7 +96,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 2.56, y: 3.56, z: 0.2}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &8542789133380476353
+--- !u!114 &3877264284375477139
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -105,7 +105,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3909226756325634277}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 243631ed44a113c49bf90e1ea40a6610, type: 3}
+  m_Script: {fileID: 11500000, guid: 69508e1a924f0914688661b58acdc518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   suit: 
@@ -125,4 +125,23 @@ MonoBehaviour:
   bezierRots: []
   timeStart: 0
   timeDuration: 0
+  eventualSortOrder: 0
+  eventualSortLayer: 
   reportFinishTo: {fileID: 0}
+  callbackPlayer:
+    type: 1
+    playerNum: 0
+    hand: []
+    handSlotdef:
+      x: 0
+      y: 0
+      faceUp: 0
+      layerName: Default
+      layerID: 0
+      id: 0
+      hiddenBy: 
+      rot: 0
+      type: slot
+      stagger: {x: 0, y: 0}
+      player: 0
+      pos: {x: 0, y: 0, z: 0}
