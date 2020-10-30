@@ -120,7 +120,7 @@ public class Player
             }
         }
 
-		if (attackvalidCards.Count == 0 && Bartok.attack_stack > 0)
+        if (attackvalidCards.Count == 0 && Bartok.attack_stack > 0)
 		{
 			for (int i = 0; i < Bartok.attack_stack; i++)
 			{
@@ -167,6 +167,78 @@ public class Player
                 Bartok.S.king = 3 * Bartok.S.queen;
                 break;
         }
+    }
+
+    public CardBartok selectCard(List<CardBartok> lCD)
+    {
+        List<CardBartok> suitfindList;
+        List<CardBartok> rankfindList;
+        List<List<CardBartok>> suitCount = new List<List<CardBartok>>(4);
+        List<List<CardBartok>> rankCount = new List<List<CardBartok>>(13);
+
+        suitCount[0] = lCD.FindAll(tmpsuit => tmpsuit.suit == "C");
+        suitCount[1] = lCD.FindAll(tmpsuit => tmpsuit.suit == "D");
+        suitCount[2] = lCD.FindAll(tmpsuit => tmpsuit.suit == "H");
+        suitCount[3] = lCD.FindAll(tmpsuit => tmpsuit.suit == "S");
+
+        int suitidx = -1;
+        switch (Bartok.S.targetCard.suit)
+        {
+            case "C":
+                suitidx = 0;
+                break;
+            case "D":
+                suitidx = 1;
+                break;
+            case "H":
+                suitidx = 2;
+                break;
+            case "S":
+                suitidx = 3;
+                break;
+        }
+
+        for (int i = 1; i <= 13; i++)
+        {
+            rankCount[i - 1] = lCD.FindAll(tmprank => tmprank.rank == i);
+        }
+
+        suitfindList = lCD.FindAll(tmpsuit => tmpsuit.suit == Bartok.S.targetCard.suit);
+        rankfindList = lCD.FindAll(tmprank => tmprank.rank == Bartok.S.targetCard.rank);
+
+        if(suitCount[suitidx].Count > 0 && rankCount[Bartok.S.targetCard.rank - 1].Count > 0)
+        {
+            if (suitCount[suitidx].Count > lCD.Count / 2)
+            {
+                return lCD[suitCount[suitidx].Count];
+            }
+            else
+            {
+                
+                return lCD.Find(tmprank => tmprank.rank == lCD.Max().rank);
+            }
+        }
+
+        foreach (CardBartok tCB in lCD)
+        {
+            if (Bartok.S.targetCard.rank == tCB.rank && Bartok.S.targetCard.suit == tCB.suit)
+            {
+                if (suitCount[suitidx].Count > lCD.Count / 2)
+                {
+                    return tCB;
+                }
+            }
+            else if (Bartok.S.targetCard.rank == tCB.rank || Bartok.S.targetCard.suit == tCB.suit)
+            {
+                return tCB;
+            }
+        }
+
+        if (Bartok.S.targetCard.rank == lCD[0].rank)
+        {
+            return lCD[0];
+        }
+        return lCD[0];
     }
 
     public void CBCallback(CardBartok tCB)
